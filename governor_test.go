@@ -1,9 +1,10 @@
 package governor_test
 
 import (
-	"governor"
 	"sync"
 	"testing"
+
+	"github.com/ameghdadian/governor"
 )
 
 type Counter struct {
