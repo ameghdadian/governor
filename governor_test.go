@@ -7,12 +7,12 @@ import (
 	"github.com/ameghdadian/governor"
 )
 
-type Counter struct {
-	C int
+type counter struct {
+	c int
 }
 
 func TestChanSync(t *testing.T) {
-	c, cleanup := governor.New(Counter{C: 10})
+	ss, cleanup := governor.New(counter{c: 10})
 	defer cleanup()
 
 	var wg sync.WaitGroup
@@ -23,18 +23,18 @@ func TestChanSync(t *testing.T) {
 	for range numGoRoutine {
 		go func() {
 			defer wg.Done()
-			c.Write(func(i *Counter) {
-				i.C += 10
+			ss.Write(func(i *counter) {
+				i.c += 10
 			})
 		}()
 	}
 
 	wg.Wait()
-	v, err := c.Read()
+	v, err := ss.Read()
 	if err != nil {
 		t.Fatal("cannot read from channel:", err)
 	}
-	if v.C != 2010 {
-		t.Fatal("got unexpected result:", v.C)
+	if v.c != 2010 {
+		t.Fatal("got unexpected result:", v.c)
 	}
 }
